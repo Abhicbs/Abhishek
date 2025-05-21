@@ -220,6 +220,65 @@
     .back-button:hover, .download-button:hover {
       color: #fff;
     }
+    /* Add Swiper CSS for graphics carousel */
+    .graphics-swiper {
+      width: 100%;
+      height: 80vh;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .graphics-swiper .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(24, 52, 92, 0.10);
+      overflow: hidden;
+    }
+    .graphics-swiper .swiper-slide img {
+      width: auto;
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(24, 52, 92, 0.10);
+      object-fit: contain;
+      transition: transform 0.4s cubic-bezier(.25,.8,.25,1);
+    }
+    .graphics-swiper .swiper-slide-active img {
+      transform: scale(1.04);
+    }
+    /* Swiper navigation and pagination color customization */
+    .graphics-swiper .swiper-pagination-bullet {
+      background: #ccc;
+      opacity: 1;
+    }
+    .graphics-swiper .swiper-pagination-bullet-active {
+      background: #18345C;
+    }
+    .graphics-swiper .swiper-button-next,
+    .graphics-swiper .swiper-button-prev {
+      color: #18345C;
+    }
+    /* Move scroll-to-top arrow above AI chat bot */
+    #scroll-top {
+      z-index: 1100 !important;
+      bottom: 170px !important;
+    }
+    /* AI chat bot button hover effect - ensure blue circle changes to yellow on hover */
+    .chat-widget-launcher {
+      background: #18345C !important;
+      transition: background 0.3s, color 0.3s;
+    }
+    .chat-widget-launcher:hover {
+      background: #F7B500 !important;
+      color: #18345C !important;
+    }
+    .chat-widget-launcher:hover svg,
+    .chat-widget-launcher:hover i {
+      color: #18345C !important;
+      fill: #18345C !important;
+    }
   </style>
 </head>
 
@@ -227,15 +286,15 @@
   <main id="main">
     <section id="portfolio-details" class="portfolio-details">
       <div class="container">
+        <div class="portfolio-details-header">
+          <span class="portfolio-details-header-title">Project Details</span>
+          <a href="index.html#portfolio" class="back-button"><i class="bi bi-arrow-left"></i> <strong>Back to Portfolio</strong></a>
+          <a id="download-link" class="download-button" download>Download File</a>
+        </div>
         <div class="row">
           <div class="col-lg-8">
-            <div class="portfolio-details-header">
-              <span class="portfolio-details-header-title">Project Details</span>
-              <a href="index.html#portfolio" class="back-button"><i class="bi bi-arrow-left"></i> <strong>Back to Portfolio</strong></a>
-              <a href="https://docs.google.com/spreadsheets/d/1dgtyfq_D9ASNYvuNDbTrFo928F6fXqye/export?format=xlsx" class="download-button" download>Download File</a>
-            </div>
             <div id="excel-container">
-              <iframe class="excel-viewer" src="https://docs.google.com/spreadsheets/d/1CpgcDmA2XsShM9kp_VctQZXRN2oUQzYy/edit?usp=sharing&ouid=102893210217672353890&rtpof=true&sd=true&embedded=true"></iframe>
+              <iframe id="excel-viewer" class="excel-viewer"></iframe>
             </div>
           </div>
 
@@ -269,18 +328,18 @@
   <script>
     // Function to get URL parameters
     function getUrlParameter(name) {
-      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      name = name.replace(/[[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '=([^&#]*)');
       var results = regex.exec(location.search);
       return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Function to load project details
+    // Function to load project details and set Excel file
     function loadProjectDetails() {
       const projectId = getUrlParameter('id');
-
-      // Load project details based on projectId
       let projectDetails = {};
+      let excelPath = '';
+      let pdfPath = '';
       switch(projectId) {
         case 'upl':
           projectDetails = {
@@ -289,6 +348,7 @@
             tools: 'Excel, Financial Modeling',
             description: 'Comprehensive financial analysis and valuation of UPL Ltd. including DCF analysis, comparable company analysis, and sensitivity analysis.'
           };
+          excelPath = 'https://docs.google.com/spreadsheets/d/1CpgcDmA2XsShM9kp_VctQZXRN2oUQzYy/edit?usp=sharing&ouid=102893210217672353890&rtpof=true&sd=true&embedded=true';
           break;
         case 'indigo':
           projectDetails = {
@@ -297,6 +357,7 @@
             tools: 'Excel, Statistical Analysis',
             description: 'Detailed financial forecasting for InterGlobe Aviation Limited (IndiGo) using advanced Excel modeling and statistical techniques.'
           };
+          excelPath = 'https://docs.google.com/spreadsheets/d/1yK5ai93rM45dI11enqn_cLS3YHFaF_V4/edit?usp=sharing&embedded=true';
           break;
         case 'pidilite':
           projectDetails = {
@@ -305,6 +366,7 @@
             tools: 'Excel, Financial Modeling',
             description: 'In-depth valuation analysis of Pidilite Industries Limited using multiple valuation methodologies.'
           };
+          excelPath = 'https://docs.google.com/spreadsheets/d/19t6Vleub-I_dcjVMf7r0eg-uDWhE25Zf/edit?usp=sharing&embedded=true';
           break;
         case 'srf':
           projectDetails = {
@@ -313,17 +375,189 @@
             tools: 'Excel',
             description: 'Fundamental valuation analysis of SRF Corporation Limited focusing on key financial metrics.'
           };
+          excelPath = 'https://docs.google.com/spreadsheets/d/1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ/edit?usp=sharing&embedded=true';
+          break;
+        case 'innovate':
+          projectDetails = {
+            category: 'Case Competition',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Innovate 4.0 - 2024: Case competition project report.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/Innovate_4.0.pdf';
+          break;
+        case 'prosper':
+          projectDetails = {
+            category: 'Case Competition',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Prosper: Case competition project report.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/prarambh.pdf';
+          break;
+        case 'aagaaz':
+          projectDetails = {
+            category: 'Case Competition',
+            date: '2023',
+            tools: 'PDF',
+            description: 'Aagaaz - IIMA: Case competition project report.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/aagaaz.pdf';
+          break;
+        case 'bric':
+          projectDetails = {
+            category: 'Research Report',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Research Paper: Comparative analysis of BRIC nations.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/bric.fin.pdf';
+          break;
+        case 'edtech':
+          projectDetails = {
+            category: 'Research Report',
+            date: '2025',
+            tools: 'PDF',
+            description: 'Ed-Tech Industry Report (2025): In-depth research report on the Ed-Tech sector.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/edtech.pdf';
+          break;
+        case 'pptbric':
+          projectDetails = {
+            category: 'Presentation Report',
+            date: '2024',
+            tools: 'PDF',
+            description: 'PPT Presentation Report: Financial System & Analysis of BRIC nations.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/fmi.bric.pdf';
+          break;
+        case 'zomato':
+          projectDetails = {
+            category: 'Data Analysis',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Zomato Sales Analysis: Power BI dashboard and RFM analysis.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/zomato.pdf';
+          break;
+        case 'powerbi':
+          projectDetails = {
+            category: 'Data Analysis',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Power BI Project: Profitability, regional & departmental analysis.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/powerbiproject.pdf';
+          break;
+        case 'enactus':
+          projectDetails = {
+            category: 'Other',
+            date: '2024',
+            tools: 'PDF',
+            description: 'Enactus India: National Competition, Enactus India, 2024.'
+          };
+          pdfPath = 'assets/img/portfolio/pdf files/enactus_india.pdf';
+          break;
+        case 'graphics':
+          projectDetails = {
+            category: 'Graphic Design',
+            date: '2024',
+            tools: 'Images',
+            description: 'A showcase of my graphic design work.'
+          };
           break;
       }
-
       // Update the DOM with project details
       document.getElementById('project-category').textContent = projectDetails.category || '';
       document.getElementById('project-date').textContent = projectDetails.date || '';
       document.getElementById('project-tools').textContent = projectDetails.tools || '';
       document.getElementById('project-description').textContent = projectDetails.description || '';
-    }
 
-    // Load project details when the page loads
+      // Set Excel iframe and download link
+      const excelViewer = document.getElementById('excel-viewer');
+      const downloadLink = document.getElementById('download-link');
+      if (projectId === 'graphics') {
+        // Hide the iframe and show the graphics swiper
+        excelViewer.style.display = 'none';
+        downloadLink.style.display = 'none';
+        if (!document.getElementById('graphics-swiper')) {
+          const graphicsContainer = document.createElement('div');
+          graphicsContainer.id = 'graphics-swiper';
+          graphicsContainer.className = 'swiper graphics-swiper';
+          graphicsContainer.innerHTML = `
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Date Reveal.png" class="img-fluid" alt="Graphic 1"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Ticket.png" class="img-fluid" alt="Graphic 2"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Coming Soon Post Final 1.0.png" class="img-fluid" alt="Graphic 3"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/final 1.00.jpg" class="img-fluid" alt="Graphic 4"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Final Post MTT.png" class="img-fluid" alt="Graphic 5"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Instagram post - 1.jpg" class="img-fluid" alt="Graphic 6"></div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          `;
+          document.getElementById('excel-container').appendChild(graphicsContainer);
+          // Initialize Swiper
+          setTimeout(() => {
+            new Swiper('.graphics-swiper', {
+              loop: true,
+              speed: 700,
+              slidesPerView: 1,
+              spaceBetween: 30,
+              centeredSlides: true,
+              grabCursor: true,
+              effect: 'slide',
+              pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+              },
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              },
+              autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+              },
+            });
+          }, 100);
+        }
+      } else if (pdfPath) {
+        excelViewer.style.display = '';
+        downloadLink.style.display = '';
+        excelViewer.src = pdfPath;
+        downloadLink.href = pdfPath;
+        const graphicsSwiper = document.getElementById('graphics-swiper');
+        if (graphicsSwiper) graphicsSwiper.remove();
+      } else {
+        excelViewer.style.display = '';
+        downloadLink.style.display = '';
+        excelViewer.src = excelPath;
+        let downloadId = '';
+        switch(projectId) {
+          case 'upl':
+            downloadId = '1dgtyfq_D9ASNYvuNDbTrFo928F6fXqye';
+            break;
+          case 'indigo':
+            downloadId = '1yK5ai93rM45dI11enqn_cLS3YHFaF_V4';
+            break;
+          case 'pidilite':
+            downloadId = '19t6Vleub-I_dcjVMf7r0eg-uDWhE25Zf';
+            break;
+          case 'srf':
+            downloadId = '1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ';
+            break;
+        }
+        if (downloadId) {
+          downloadLink.href = `https://docs.google.com/spreadsheets/d/${downloadId}/export?format=xlsx`;
+        } else {
+          downloadLink.href = '#';
+        }
+        const graphicsSwiper = document.getElementById('graphics-swiper');
+        if (graphicsSwiper) graphicsSwiper.remove();
+      }
+    }
     window.onload = loadProjectDetails;
   </script>
 </body>

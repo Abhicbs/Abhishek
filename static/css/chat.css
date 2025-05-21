@@ -1,7 +1,10 @@
 /* Chat Widget Styles */
 :root {
-    --primary-color: #10244C;
-    --secondary-color: #0ea5e9;
+    --primary-color: #18345C;
+    --accent-yellow: #F7B500;
+    --light-yellow: #FFF9E5;
+    --lighter-yellow: #FFFBEA;
+    --white: #fff;
     --background-color: #ffffff;
     --text-color: #1f2937;
     --chat-bg: #f8fafc;
@@ -20,31 +23,37 @@
 
 .chat-button {
     align-self: flex-end;
-    background-color: var(--primary-color);
+    background-color: #18345C !important;
     color: white;
     border: none;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease;
+    transition: background 0.3s, color 0.3s;
+    bottom: 80px;
 }
 
 .chat-button:hover {
-    transform: scale(1.05);
-    background-color: var(--secondary-color);
+    background-color: #F7B500 !important;
+    color: #18345C !important;
+}
+
+.chat-button:hover svg {
+    color: #18345C !important;
+    fill: #18345C !important;
 }
 
 .chat-container {
     display: none;
-    background: var(--background-color);
+    background: var(--light-yellow);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(24, 52, 92, 0.18), 0 1.5px 8px rgba(24, 52, 92, 0.10);
     margin-bottom: 1rem;
     height: 480px;
     flex-direction: column;
@@ -52,7 +61,7 @@
 
 .chat-header {
     background: var(--primary-color);
-    color: white;
+    color: var(--white);
     padding: 1rem;
     font-weight: 600;
     display: flex;
@@ -99,28 +108,30 @@
 }
 
 .user-message {
-    background: var(--primary-color);
-    color: white;
+    background: var(--accent-yellow);
+    color: var(--primary-color);
     margin-left: auto;
     border-bottom-right-radius: 0.25rem;
     float: right;
     clear: both;
+    border: 1px solid #f7e6b0;
 }
 
 .ai-message {
-    background: white;
-    color: var(--text-color);
+    background: var(--lighter-yellow);
+    color: var(--primary-color);
     margin-right: auto;
     border-bottom-left-radius: 0.25rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     float: left;
     clear: both;
+    border: 1px solid #f7e6b0;
 }
 
 .chat-input-container {
     padding: 1rem;
-    background: var(--background-color);
-    border-top: 1px solid #e5e7eb;
+    background: var(--light-yellow);
+    border-top: 1px solid #f7e6b0;
 }
 
 .chat-input-wrapper {
@@ -131,10 +142,12 @@
 .chat-input {
     flex-grow: 1;
     padding: 0.75rem 1rem;
-    border: 1px solid #e5e7eb;
+    border: 1.5px solid var(--accent-yellow);
     border-radius: 1.5rem;
     outline: none;
     transition: border-color 0.2s ease;
+    background: var(--white);
+    color: var(--primary-color);
 }
 
 .chat-input:focus {
@@ -143,16 +156,17 @@
 
 .chat-send {
     background: var(--primary-color);
-    color: white;
+    color: var(--white);
     border: none;
     border-radius: 1.5rem;
     padding: 0.75rem 1.5rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background 0.2s, color 0.2s;
 }
 
 .chat-send:hover {
-    background: var(--secondary-color);
+    background: var(--accent-yellow);
+    color: var(--primary-color);
 }
 
 .typing-indicator {
@@ -251,7 +265,7 @@
 
     .chat-button {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 140px;
+        right: 80px;
     }
 } 
