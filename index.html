@@ -949,7 +949,7 @@
           <!-- Right Column -->
           <div class="col-lg-7 contact-form-column">
             <h2>GET IN TOUCH</h2>
-            <form class="contact-form" id="contactForm" onsubmit="return handleSubmit(event)">
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/mqaqozel" method="POST">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <label>FULL NAME</label>
@@ -1165,54 +1165,6 @@
       }
     }
   </style>
-
-  <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-      
-      const formData = new FormData(event.target);
-      const data = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        subject: formData.get('subject'),
-        message: formData.get('message')
-      };
-
-      // Send email using EmailJS
-      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-        to_email: 'abhishek.23303@sscbs.du.ac.in',
-        from_name: data.name,
-        from_email: data.email,
-        subject: data.subject,
-        message: data.message
-      })
-      .then(function(response) {
-        console.log('SUCCESS!', response.status, response.text);
-        showToast();
-        event.target.reset();
-      })
-      .catch(function(error) {
-        console.log('FAILED...', error);
-        alert('Failed to send message. Please try again.');
-      });
-
-      return false;
-    }
-
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.add('active');
-      
-      setTimeout(() => {
-        toast.classList.remove('active');
-      }, 5000);
-    }
-
-    // Close toast when clicking the close button
-    document.querySelector('.toast-notification .close').addEventListener('click', () => {
-      document.getElementById('toast').classList.remove('active');
-    });
-  </script>
 
   <!-- Add EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
