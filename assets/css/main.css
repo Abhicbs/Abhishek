@@ -819,17 +819,30 @@ section,
   padding-bottom: 15px;
 }
 
+.stats .row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
 .stats .stats-item {
-  padding: 30px;
-  width: 100%;
+  flex: 1 1 0;
+  padding: 24px 0;
+  margin: 0 8px;
+  min-width: 0;
+  text-align: center;
+  background: none;
+  box-shadow: none;
 }
 
 .stats .stats-item i {
   color: #F2C522;
   display: block;
   font-size: 44px;
-  float: left;
-  line-height: 0;
+  margin: 0 auto 0.5rem auto;
+  float: none;
+  line-height: 1;
 }
 
 .stats .stats-item .purecounter {
@@ -838,15 +851,51 @@ section,
   line-height: 40px;
   display: block;
   font-weight: 700;
-  margin-left: 60px;
+  margin: 0 auto;
 }
 
 .stats .stats-item p {
   color: color-mix(in srgb, var(--default-color), transparent 40%);
-  padding: 15px 0 0 0;
-  margin: 0 0 0 60px;
+  padding: 10px 0 0 0;
+  margin: 0 auto;
   font-family: var(--heading-font);
   font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .stats .row {
+    flex-wrap: wrap;
+  }
+  .stats .stats-item {
+    margin: 0 0 18px 0;
+    padding: 18px 0;
+  }
+}
+
+.stats-number {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 48px;
+  font-weight: 700;
+  color: #10244C;
+  line-height: 40px;
+}
+.stats-number .purecounter {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+  display: inline;
+  margin: 0;
+}
+.stats-number .plus-sign {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin-left: 2px;
+  line-height: inherit;
+  display: inline;
 }
 
 /*--------------------------------------------------------------
@@ -882,12 +931,19 @@ section,
 }
 
 .skills .progress-bar {
-  width: 1px;
+  width: 0;
   height: 10px;
-  transition: 0.9s;
+  transition: width 1.5s cubic-bezier(.4,2,.6,1);
   background-color: #10244C;
   border-radius: 5px;
   position: relative;
+}
+.skills .progress-bar.animated {
+  animation: progressBarGrow 1.5s forwards cubic-bezier(.4,2,.6,1);
+}
+@keyframes progressBarGrow {
+  from { width: 0; }
+  to { width: var(--progress-width, 100%); }
 }
 
 .skills .progress-bar::after {

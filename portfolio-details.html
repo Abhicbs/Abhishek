@@ -287,7 +287,7 @@
     <section id="portfolio-details" class="portfolio-details">
       <div class="container">
         <div class="portfolio-details-header">
-          <span class="portfolio-details-header-title">Project Details</span>
+          <span class="portfolio-details-header-title" id="main-title"></span>
           <a href="index.html#portfolio" class="back-button"><i class="bi bi-arrow-left"></i> <strong>Back to Portfolio</strong></a>
           <a id="download-link" class="download-button" download>Download File</a>
         </div>
@@ -300,7 +300,7 @@
 
           <div class="col-lg-4">
             <div class="portfolio-info">
-              <h3>Project information</h3>
+              <h3 id="project-info-title"></h3>
               <ul>
                 <li><strong>Category</strong>: <span id="project-category"></span></li>
                 <li><strong>Project date</strong>: <span id="project-date"></span></li>
@@ -308,10 +308,9 @@
               </ul>
             </div>
             <div class="project-desc-box">
-              <h2>Project Description</h2>
+              <h2 id="project-desc-title"></h2>
+              <div id="project-description" style="min-height: 80px;"></div>
               <p id="project-description"></p>
-              <p>This project involved building a dynamic three-statement financial model for UPL Ltd., including scenario analysis and sensitivity checks. The model incorporates real-world data and industry benchmarks to ensure accuracy and relevance.</p>
-              <p>Key deliverables included a DCF valuation, peer comparison, and actionable insights for strategic decision-making. The project demonstrates advanced Excel modeling, financial analysis, and presentation skills.</p>
             </div>
           </div>
         </div>
@@ -343,9 +342,9 @@
       switch(projectId) {
         case 'upl':
           projectDetails = {
-            category: 'Financial Analysis',
-            date: 'January 2024',
-            tools: 'Excel, Financial Modeling',
+            category: 'Financial Modeling & Valuation',
+            date: 'January 2025',
+            tools: 'Excel, Financial Modeling, Prowess IQ, Python, Google suite',
             description: 'Comprehensive financial analysis and valuation of UPL Ltd. including DCF analysis, comparable company analysis, and sensitivity analysis.'
           };
           excelPath = 'https://docs.google.com/spreadsheets/d/1CpgcDmA2XsShM9kp_VctQZXRN2oUQzYy/edit?usp=sharing&ouid=102893210217672353890&rtpof=true&sd=true&embedded=true';
@@ -556,6 +555,106 @@
         }
         const graphicsSwiper = document.getElementById('graphics-swiper');
         if (graphicsSwiper) graphicsSwiper.remove();
+      }
+
+      // Set main-title, project-info-title, project-desc-title, and project-description
+      const projectTitles = {
+        upl: {
+          main: 'UPL Ltd. Financial Valuation',
+          info: 'Project information',
+          descTitle: 'About This Project',
+          desc: 'I built a <strong>3-statement financial model</strong> & <strong>Debt-to-Equity </strong>schedules for UPL Ltd.,<strong>forecasted revenue</strong> based on assumptions, projected <strong>free cash flows</strong>, and ran a <strong>levered DCF</strong> using an 11.3% WACC to estimate intrinsic value. The analysis included <strong>terminal value</strong> calculations (perpetuity growth and EBITDA multiples) and <strong>sensitivity analysis</strong> on growth/discount rates. I also benchmarked UPL against peers using <strong>EV/EBITDA</strong> and <strong>P/E multiples</strong> , modeled scenarios (base/optimistic/ conservative), and concluded the stock was <strong>undervalued</strong> relative to its <strong>DCF-derived</strong> share price.'
+        },
+        indigo: {
+          main: 'IndiGo (3-Statement Operating Model)',
+          info: 'Project information',
+          descTitle: 'About This Project',
+          desc: 'I built & forecasted a <strong>3-statement operating model</strong> for IndiGo (InterGlobe Aviation Limited); projected <strong>free cash flows</strong> using detailed <strong>revenue drivers</strong> (ASK growth, passenger yield, ancillary revenue) and <strong>cost assumptions</strong> (fuel prices, CASK-ex fuel). Also, performed <strong>ratio analysis</strong>, and <strong>scenario modeling</strong> to assess financial health and growth potential.'
+        },
+        pidilite: {
+          main: 'Pidilite Industries Ltd. Valuation',
+          info: 'Project information',
+          descTitle: 'About This Project',
+          desc: 'In this project, I analyzed the financial performance of <strong>Pidilite Industries Ltd</strong> using key tools such as <strong>common size analysis, trend analysis, and DuPont analysis</strong>. I worked with its balance sheet, income statement, and cash flow statement to understand how the company manages its money. I evaluated key financial ratios such as <strong>ROE, ROCE, debt-equity ratio, and net profit margin</strong>. This helped me assess Pidilite’s profitability, liquidity, and overall financial health in a more practical, hands-on way.'
+        },
+        srf: {
+          main: 'SRF Corporation Valuation (basic)',
+          info: 'Project information',
+          descTitle: 'About This Project',
+          desc: 'I developed a <strong>3-statement financial model</strong> for SRF Ltd., capturing historical performance (2015–2024) and forecasting key metrics like sales, EBITDA, and EPS. The analysis included detailed <strong>ratio analysis</strong> (margins, ROE, ROCE, turnover ratios) and tracked trends in <strong>working capital, profitability, and leverage</strong>. I also calculated regression beta for <strong>market risk assessment</strong> and benchmarked SRF’s operational and financial efficiency over time, providing a comprehensive view of its financial health and growth trajectory.'
+        },
+        innovate: {
+          main: 'Innovate 4.0 - 2024',
+          info: 'Basic Information',
+          descTitle: 'About This Project',
+          desc: 'In progress...'
+        },
+        prosper: {
+          main: 'Prosper: Case Competition',
+          info: 'Basic Information',
+          descTitle: 'About This Project',
+          desc: 'This case competition analyzes India’s teleconsultation and e-pharmacy markets, projected to reach $5.5 billion with a 31% CAGR. Technical solutions include virtual waiting rooms, reminder systems, cancellation policies, and end-to-end encryption. Key concerns are doctor-patient engagement, data privacy, and high no-show rates. Proposed interventions—analytics-driven overbooking, partnerships with Max Healthcare and Dr Lal Path Labs, and UI/UX improvements—are assessed for investment, impact, and complexity, emphasizing integrated, patient-centric digital health platforms'
+        },
+        aagaaz: {
+          main: 'Aagaaz - IIMA',
+          info: 'Case Competition Project',
+          descTitle: 'About This Project',
+          desc: 'Prarambh (Kaagazi) targets efficient paper waste management in Delhi, collecting from institutions and corporates, partnering with Green-O-Tech and the Kathputli community. The process includes waste segregation, recycling, and upcycling into eco-friendly products like notebooks and bookmarks. Kaagazi Clubs promote awareness and responsible disposal. Financials detail revenue streams and gross margins, while SWOT and competitor analysis highlight sustainability strengths. The roadmap includes e-commerce, product diversification, and expansion, supporting Sustainable Development Goals and a circular economy.'
+        },
+        bric: {
+          main: 'BRIC Nations Research Paper',
+          info: 'Research Report Project',
+          descTitle: 'About This Project',
+          desc: 'Research Paper: Comparative analysis of BRIC nations and the Indian Financial System.'
+        },
+        edtech: {
+          main: 'Ed-Tech Industry Report (2025)',
+          info: 'Research Report Project',
+          descTitle: 'About This Project',
+          desc: 'India’s Ed-tech industry, valued at $7.5 billion in 2024, spans K-12 education, test preparation, Ed-tech SaaS, online certification, skill development, and online discovery. Major players like Byju’s, Physics Wallah, and Vedantu leverage AI, gamified learning, and adaptive platforms. The sector saw a funding surge during the pandemic, then an 87% decline, but is recovering. Key challenges include high pricing, retention, and doubt resolution; opportunities lie in upskilling, regional content, and B2C models.' 
+        },
+        pptbric: {
+          main: 'BRIC Financial System Presentation',
+          info: 'Presentation Report Project',
+          descTitle: 'About This Project',
+          desc: 'PPT Presentation Report: Financial System & Analysis of BRIC nations.'
+        },
+        zomato: {
+          main: 'Zomato Sales Analysis',
+          info: 'Data Analysis Project',
+          descTitle: 'About This Project',
+          desc: 'The Zomato report analyzes order and sales data using metrics like order quantity, order amount, cuisine type, and customer demographics (gender, age group, occupation, marital status). Vegetarian orders dominate, with Chinese and North Indian cuisines rated highest. Top restaurants by sales and detailed transactional data by year, month, and city are presented. Data visualization reveals trends in consumer behavior, average order values, and market segmentation, supporting targeted marketing and operational decisions for Zomato and partners.'
+        },
+        powerbi: {
+          main: 'Power BI Profitability Project',
+          info: 'Data Analysis Project',
+          descTitle: 'About This Project',
+          desc: 'The Power BI dashboard-driven report visualizes profitability across departments (Sales, R&D, HR, IT, Marketing, Operations) and regions (North, South, East, West, Central). Key metrics include total profit margin (80.04%), total revenue, cost per employee, and revenue per employee. North region and Sales department lead in profitability and efficiency. The analysis covers monthly trends, departmental and regional breakdowns, highlighting operational strengths and supporting strategic decisions with advanced data visualization and DAX calculations.'
+        },
+        enactus: {
+          main: 'Enactus India National Competition',
+          info: 'Other Project',
+          descTitle: 'About This Project',
+          desc: 'Enactus India’s 2024 report features Project Kaagazi, which collects, segregates, and recycles paper waste through Kaagazi Clubs, empowering the Kathputli community in product design and sales. Project Kshitij partners with NGOs to improve infrastructure, address malnutrition, and implement the VAKT Model for primary education. Both projects prioritize sustainable impact, economic empowerment, and responsible consumption, showing measurable results in revenue, water saved, and thousands directly impacted through innovative, eco-friendly business processes.'
+        },
+        graphics: {
+          main: 'My Graphic Designs',
+          info: 'Graphic Design Project',
+          descTitle: 'About This Project',
+          desc: 'A showcase of my graphic design work, including creativity and skills.'
+        },
+        // Add more or update as needed
+      };
+      if (projectTitles[projectId]) {
+        document.getElementById('main-title').textContent = projectTitles[projectId].main;
+        document.getElementById('project-info-title').textContent = projectTitles[projectId].info;
+        document.getElementById('project-desc-title').textContent = projectTitles[projectId].descTitle;
+        document.getElementById('project-description').innerHTML = projectTitles[projectId].desc;
+      } else {
+        document.getElementById('main-title').textContent = 'Project Details';
+        document.getElementById('project-info-title').textContent = 'Project Information';
+        document.getElementById('project-desc-title').textContent = 'About This Project';
+        document.getElementById('project-description').innerHTML = '';
       }
     }
     window.onload = loadProjectDetails;
