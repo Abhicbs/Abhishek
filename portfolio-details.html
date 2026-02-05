@@ -113,12 +113,6 @@
       top: 0;
       overflow-y: auto;
     }
-    .portfolio-details .portfolio-info, .portfolio-details .portfolio-description {
-      margin-left: 0;
-      margin-right: 0;
-      box-shadow: none;
-      border-radius: 0;
-    }
     .portfolio-details-header {
       display: flex;
       flex-direction: row;
@@ -220,7 +214,6 @@
     .back-button:hover, .download-button:hover {
       color: #fff;
     }
-    /* Add Swiper CSS for graphics carousel */
     .graphics-swiper {
       width: 100%;
       height: 80vh;
@@ -245,10 +238,6 @@
       object-fit: contain;
       transition: transform 0.4s cubic-bezier(.25,.8,.25,1);
     }
-    .graphics-swiper .swiper-slide-active img {
-      transform: scale(1.04);
-    }
-    /* Swiper navigation and pagination color customization */
     .graphics-swiper .swiper-pagination-bullet {
       background: #ccc;
       opacity: 1;
@@ -260,25 +249,6 @@
     .graphics-swiper .swiper-button-prev {
       color: #18345C;
     }
-    /* Move scroll-to-top arrow above AI chat bot */
-    #scroll-top {
-      z-index: 1100 !important;
-      bottom: 170px !important;
-    }
-    /* AI chat bot button hover effect - ensure blue circle changes to yellow on hover */
-    .chat-widget-launcher {
-      background: #18345C !important;
-      transition: background 0.3s, color 0.3s;
-    }
-    .chat-widget-launcher:hover {
-      background: #F7B500 !important;
-      color: #18345C !important;
-    }
-    .chat-widget-launcher:hover svg,
-    .chat-widget-launcher:hover i {
-      color: #18345C !important;
-      fill: #18345C !important;
-    }
   </style>
 </head>
 
@@ -287,9 +257,9 @@
     <section id="portfolio-details" class="portfolio-details">
       <div class="container">
         <div class="portfolio-details-header">
-          <span class="portfolio-details-header-title" id="main-title"></span>
+          <span class="portfolio-details-header-title" id="main-title">Project Details</span>
           <a href="index.html#portfolio" class="back-button"><i class="bi bi-arrow-left"></i> <strong>Back to Portfolio</strong></a>
-          <a id="download-link" class="download-button" download>Download File</a>
+          <a id="download-link" class="download-button" download style="display: none;">Download File</a>
         </div>
         <div class="row">
           <div class="col-lg-8">
@@ -299,18 +269,17 @@
           </div>
 
           <div class="col-lg-4">
-            <div class="portfolio-info">
-              <h3 id="project-info-title"></h3>
+            <div class="project-info-box">
+              <h3 id="project-info-title">Project Information</h3>
               <ul>
-                <li><strong>Category</strong>: <span id="project-category"></span></li>
-                <li><strong>Project date</strong>: <span id="project-date"></span></li>
-                <li><strong>Tools used</strong>: <span id="project-tools"></span></li>
+                <li><strong>Category</strong>: <span id="project-category">Loading...</span></li>
+                <li><strong>Project date</strong>: <span id="project-date">Loading...</span></li>
+                <li><strong>Tools used</strong>: <span id="project-tools">Loading...</span></li>
               </ul>
             </div>
             <div class="project-desc-box">
-              <h2 id="project-desc-title"></h2>
-              <div id="project-description" style="min-height: 80px;"></div>
-              <p id="project-description"></p>
+              <h2 id="project-desc-title">About This Project</h2>
+              <div id="project-description" style="min-height: 80px;">Loading project details...</div>
             </div>
           </div>
         </div>
@@ -325,339 +294,233 @@
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <script>
-    // Function to get URL parameters
-    function getUrlParameter(name) {
-      name = name.replace(/[[\]]/g, '\\$&');
-      var regex = new RegExp('[?&]' + name + '=([^&#]*)');
-      var results = regex.exec(location.search);
-      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    // Project data configuration
+    const projectData = {
+      'upl': {
+        title: 'UPL Ltd. Financial Valuation',
+        category: 'Financial Modeling & Valuation',
+        date: 'January 2025',
+        tools: 'Excel, Financial Modeling, Prowess IQ, Python, Google suite',
+        description: 'I built a <strong>3-statement financial model</strong> & <strong>Debt-to-Equity </strong>schedules for UPL Ltd.,<strong>forecasted revenue</strong> based on assumptions, projected <strong>free cash flows</strong>, and ran a <strong>levered DCF</strong> using an 11.3% WACC to estimate intrinsic value. The analysis included <strong>terminal value</strong> calculations (perpetuity growth and EBITDA multiples) and <strong>sensitivity analysis</strong> on growth/discount rates. I also benchmarked UPL against peers using <strong>EV/EBITDA</strong> and <strong>P/E multiples</strong> , modeled scenarios (base/optimistic/ conservative), and concluded the stock was <strong>undervalued</strong> relative to its <strong>DCF-derived</strong> share price.',
+        pdfPath: 'assets/img/portfolio/pdf files/UPL_Ltd_Valuation.pdf'
+      },
+      'Apple': {
+        title: 'Apple (Automated Valuation)',
+        category: 'Financial Forecasting',
+        date: 'February 2024',
+        tools: 'Excel, Statistical Analysis',
+        description: 'I built & forecasted a <strong>3-statement operating model</strong> for IndiGo (InterGlobe Aviation Limited); projected <strong>free cash flows</strong> using detailed <strong>revenue drivers</strong> (ASK growth, passenger yield, ancillary revenue) and <strong>cost assumptions</strong> (fuel prices, CASK-ex fuel). Also, performed <strong>ratio analysis</strong>, and <strong>scenario modeling</strong> to assess financial health and growth potential.',
+        pdfPath: 'assets/img/portfolio/pdf files/Apple Valuation 1.2 (pdf).pdf'
+      },
+      'Aspen': {
+        title: 'The Aspen (Real Estate Valuation)',
+        category: 'Valuation',
+        date: 'March 2024',
+        tools: 'Excel, Financial Modeling',
+        description: 'In this project, I analyzed the financial performance of <strong>Aspen</strong> using key tools such as <strong>common size analysis, trend analysis, and DuPont analysis</strong>. I worked with its balance sheet, income statement, and cash flow statement to understand how the company manages its money. I evaluated key financial ratios such as <strong>ROE, ROCE, debt-equity ratio, and net profit margin</strong>. This helped me assess Aspen\'s profitability, liquidity, and overall financial health in a more practical, hands-on way.',
+        pdfPath: 'assets/img/portfolio/pdf files/Aspen.pdf'
+      },
+      'srf': {
+        title: 'Kaynes Technologies - Equity Research Report',
+        category: 'Basic Valuation',
+        date: 'April 2024',
+        tools: 'Excel',
+        description: 'I developed a <strong>3-statement financial model</strong> for SRF Ltd., capturing historical performance (2015–2024) and forecasting key metrics like sales, EBITDA, and EPS. The analysis included detailed <strong>ratio analysis</strong> (margins, ROE, ROCE, turnover ratios) and tracked trends in <strong>working capital, profitability, and leverage</strong>. I also calculated regression beta for <strong>market risk assessment</strong> and benchmarked SRF\'s operational and financial efficiency over time, providing a comprehensive view of its financial health and growth trajectory.',
+        excelPath: 'https://docs.google.com/spreadsheets/d/1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ/edit?usp=sharing&embedded=true',
+        downloadId: '1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ'
+      },
+      'innovate': {
+        title: 'Innovate 4.0 - 2024',
+        category: 'Case Competition',
+        date: '2024',
+        tools: 'PDF',
+        description: 'Innovate 4.0 - 2024: Case competition project report.',
+        pdfPath: 'assets/img/portfolio/pdf files/Innovate_4.0.pdf'
+      },
+      'prosper': {
+        title: 'Prosper: Case Competition',
+        category: 'Case Competition',
+        date: '2024',
+        tools: 'PDF',
+        description: 'This case competition analyzes India\'s teleconsultation and e-pharmacy markets, projected to reach $5.5 billion with a 31% CAGR. Technical solutions include virtual waiting rooms, reminder systems, cancellation policies, and end-to-end encryption. Key concerns are doctor-patient engagement, data privacy, and high no-show rates. Proposed interventions—analytics-driven overbooking, partnerships with Max Healthcare and Dr Lal Path Labs, and UI/UX improvements—are assessed for investment, impact, and complexity, emphasizing integrated, patient-centric digital health platforms',
+        pdfPath: 'assets/img/portfolio/pdf files/prarambh.pdf'
+      },
+      'aagaaz': {
+        title: 'Aagaaz - IIMA',
+        category: 'Case Competition',
+        date: '2023',
+        tools: 'PDF',
+        description: 'Prarambh (Kaagazi) targets efficient paper waste management in Delhi, collecting from institutions and corporates, partnering with Green-O-Tech and the Kathputli community. The process includes waste segregation, recycling, and upcycling into eco-friendly products like notebooks and bookmarks. Kaagazi Clubs promote awareness and responsible disposal. Financials detail revenue streams and gross margins, while SWOT and competitor analysis highlight sustainability strengths. The roadmap includes e-commerce, product diversification, and expansion, supporting Sustainable Development Goals and a circular economy.',
+        pdfPath: 'assets/img/portfolio/pdf files/aagaaz.pdf'
+      },
+      'bric': {
+        title: 'BRIC Nations Research Paper',
+        category: 'Research Report',
+        date: '2024',
+        tools: 'PDF',
+        description: 'Research Paper: Comparative analysis of BRIC nations and the Indian Financial System.',
+        pdfPath: 'assets/img/portfolio/pdf files/bric.fin.pdf'
+      },
+      'edtech': {
+        title: 'Ed-Tech Industry Report (2025)',
+        category: 'Research Report',
+        date: '2025',
+        tools: 'PDF',
+        description: 'India\'s Ed-tech industry, valued at $7.5 billion in 2024, spans K-12 education, test preparation, Ed-tech SaaS, online certification, skill development, and online discovery. Major players like Byju\'s, Physics Wallah, and Vedantu leverage AI, gamified learning, and adaptive platforms. The sector saw a funding surge during the pandemic, then an 87% decline, but is recovering. Key challenges include high pricing, retention, and doubt resolution; opportunities lie in upskilling, regional content, and B2C models.',
+        pdfPath: 'assets/img/portfolio/pdf files/edtech.pdf'
+      },
+      'pptbric': {
+        title: 'BRIC Financial System Presentation',
+        category: 'Presentation Report',
+        date: '2024',
+        tools: 'PDF',
+        description: 'PPT Presentation Report: Financial System & Analysis of BRIC nations.',
+        pdfPath: 'assets/img/portfolio/pdf files/fmi.bric.pdf'
+      },
+      'zomato': {
+        title: 'Zomato Sales Analysis',
+        category: 'Data Analysis',
+        date: '2024',
+        tools: 'PDF',
+        description: 'The Zomato report analyzes order and sales data using metrics like order quantity, order amount, cuisine type, and customer demographics (gender, age group, occupation, marital status). Vegetarian orders dominate, with Chinese and North Indian cuisines rated highest. Top restaurants by sales and detailed transactional data by year, month, and city are presented. Data visualization reveals trends in consumer behavior, average order values, and market segmentation, supporting targeted marketing and operational decisions for Zomato and partners.',
+        pdfPath: 'assets/img/portfolio/pdf files/zomato.pdf'
+      },
+      'powerbi': {
+        title: 'Power BI Profitability Project',
+        category: 'Data Analysis',
+        date: '2024',
+        tools: 'PDF',
+        description: 'The Power BI dashboard-driven report visualizes profitability across departments (Sales, R&D, HR, IT, Marketing, Operations) and regions (North, South, East, West, Central). Key metrics include total profit margin (80.04%), total revenue, cost per employee, and revenue per employee. North region and Sales department lead in profitability and efficiency. The analysis covers monthly trends, departmental and regional breakdowns, highlighting operational strengths and supporting strategic decisions with advanced data visualization and DAX calculations.',
+        pdfPath: 'assets/img/portfolio/pdf files/powerbiproject.pdf'
+      },
+      'enactus': {
+        title: 'Enactus India National Competition',
+        category: 'Other',
+        date: '2024',
+        tools: 'PDF',
+        description: 'Enactus India\'s 2024 report features Project Kaagazi, which collects, segregates, and recycles paper waste through Kaagazi Clubs, empowering the Kathputli community in product design and sales. Project Kshitij partners with NGOs to improve infrastructure, address malnutrition, and implement the VAKT Model for primary education. Both projects prioritize sustainable impact, economic empowerment, and responsible consumption, showing measurable results in revenue, water saved, and thousands directly impacted through innovative, eco-friendly business processes.',
+        pdfPath: 'assets/img/portfolio/pdf files/enactus_india.pdf'
+      },
+      'graphics': {
+        title: 'My Graphic Designs',
+        category: 'Graphic Design',
+        date: '2024',
+        tools: 'Images',
+        description: 'A showcase of my graphic design work, including creativity and skills.',
+        isGraphics: true
+      }
+    };
+
+    // Get URL parameter
+    function getUrlParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '';
     }
 
-    // Function to load project details and set Excel file
-    function loadProjectDetails() {
-      const projectId = getUrlParameter('id');
-      let projectDetails = {};
-      let excelPath = '';
-      let pdfPath = '';
-      switch(projectId) {
-        case 'upl':
-          projectDetails = {
-            category: 'Financial Modeling & Valuation',
-            date: 'January 2025',
-            tools: 'Excel, Financial Modeling, Prowess IQ, Python, Google suite',
-            description: 'Comprehensive financial analysis and valuation of UPL Ltd. including DCF analysis, comparable company analysis, and sensitivity analysis.'
-          };
-          excelPath = 'https://docs.google.com/spreadsheets/d/1CpgcDmA2XsShM9kp_VctQZXRN2oUQzYy/edit?usp=sharing&ouid=102893210217672353890&rtpof=true&sd=true&embedded=true';
-          break;
-        case 'indigo':
-          projectDetails = {
-            category: 'Financial Forecasting',
-            date: 'February 2024',
-            tools: 'Excel, Statistical Analysis',
-            description: 'Detailed financial forecasting for InterGlobe Aviation Limited (IndiGo) using advanced Excel modeling and statistical techniques.'
-          };
-          excelPath = 'https://docs.google.com/spreadsheets/d/1yK5ai93rM45dI11enqn_cLS3YHFaF_V4/edit?usp=sharing&embedded=true';
-          break;
-        case 'pidilite':
-          projectDetails = {
-            category: 'Valuation',
-            date: 'March 2024',
-            tools: 'Excel, Financial Modeling',
-            description: 'In-depth valuation analysis of Pidilite Industries Limited using multiple valuation methodologies.'
-          };
-          excelPath = 'https://docs.google.com/spreadsheets/d/19t6Vleub-I_dcjVMf7r0eg-uDWhE25Zf/edit?usp=sharing&embedded=true';
-          break;
-        case 'srf':
-          projectDetails = {
-            category: 'Basic Valuation',
-            date: 'April 2024',
-            tools: 'Excel',
-            description: 'Fundamental valuation analysis of SRF Corporation Limited focusing on key financial metrics.'
-          };
-          excelPath = 'https://docs.google.com/spreadsheets/d/1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ/edit?usp=sharing&embedded=true';
-          break;
-        case 'innovate':
-          projectDetails = {
-            category: 'Case Competition',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Innovate 4.0 - 2024: Case competition project report.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/Innovate_4.0.pdf';
-          break;
-        case 'prosper':
-          projectDetails = {
-            category: 'Case Competition',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Prosper: Case competition project report.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/prarambh.pdf';
-          break;
-        case 'aagaaz':
-          projectDetails = {
-            category: 'Case Competition',
-            date: '2023',
-            tools: 'PDF',
-            description: 'Aagaaz - IIMA: Case competition project report.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/aagaaz.pdf';
-          break;
-        case 'bric':
-          projectDetails = {
-            category: 'Research Report',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Research Paper: Comparative analysis of BRIC nations.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/bric.fin.pdf';
-          break;
-        case 'edtech':
-          projectDetails = {
-            category: 'Research Report',
-            date: '2025',
-            tools: 'PDF',
-            description: 'Ed-Tech Industry Report (2025): In-depth research report on the Ed-Tech sector.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/edtech.pdf';
-          break;
-        case 'pptbric':
-          projectDetails = {
-            category: 'Presentation Report',
-            date: '2024',
-            tools: 'PDF',
-            description: 'PPT Presentation Report: Financial System & Analysis of BRIC nations.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/fmi.bric.pdf';
-          break;
-        case 'zomato':
-          projectDetails = {
-            category: 'Data Analysis',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Zomato Sales Analysis: Power BI dashboard and RFM analysis.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/zomato.pdf';
-          break;
-        case 'powerbi':
-          projectDetails = {
-            category: 'Data Analysis',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Power BI Project: Profitability, regional & departmental analysis.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/powerbiproject.pdf';
-          break;
-        case 'enactus':
-          projectDetails = {
-            category: 'Other',
-            date: '2024',
-            tools: 'PDF',
-            description: 'Enactus India: National Competition, Enactus India, 2024.'
-          };
-          pdfPath = 'assets/img/portfolio/pdf files/enactus_india.pdf';
-          break;
-        case 'graphics':
-          projectDetails = {
-            category: 'Graphic Design',
-            date: '2024',
-            tools: 'Images',
-            description: 'A showcase of my graphic design work.'
-          };
-          break;
+    // Load project details
+    function loadProject() {
+      const projectId = getUrlParam('id');
+      
+      if (!projectId) {
+        document.getElementById('project-category').textContent = 'No project selected';
+        return;
       }
-      // Update the DOM with project details
-      document.getElementById('project-category').textContent = projectDetails.category || '';
-      document.getElementById('project-date').textContent = projectDetails.date || '';
-      document.getElementById('project-tools').textContent = projectDetails.tools || '';
-      document.getElementById('project-description').textContent = projectDetails.description || '';
 
-      // Set Excel iframe and download link
+      const project = projectData[projectId];
+      
+      if (!project) {
+        document.getElementById('main-title').textContent = 'Project Not Found';
+        document.getElementById('project-category').textContent = 'Unknown';
+        document.getElementById('project-date').textContent = 'N/A';
+        document.getElementById('project-tools').textContent = 'N/A';
+        document.getElementById('project-description').textContent = 'The requested project could not be found.';
+        return;
+      }
+
+      // Update title
+      document.getElementById('main-title').textContent = project.title;
+      document.getElementById('project-info-title').textContent = 'Project Information';
+      document.getElementById('project-desc-title').textContent = 'About This Project';
+
+      // Update project info
+      document.getElementById('project-category').textContent = project.category;
+      document.getElementById('project-date').textContent = project.date;
+      document.getElementById('project-tools').textContent = project.tools;
+      document.getElementById('project-description').innerHTML = project.description;
+
+      // Handle file display
       const excelViewer = document.getElementById('excel-viewer');
       const downloadLink = document.getElementById('download-link');
-      if (projectId === 'graphics') {
-        // Hide the iframe and show the graphics swiper
+      const excelContainer = document.getElementById('excel-container');
+
+      if (project.isGraphics) {
+        // Graphics carousel
         excelViewer.style.display = 'none';
         downloadLink.style.display = 'none';
+        
         if (!document.getElementById('graphics-swiper')) {
-          const graphicsContainer = document.createElement('div');
-          graphicsContainer.id = 'graphics-swiper';
-          graphicsContainer.className = 'swiper graphics-swiper';
-          graphicsContainer.innerHTML = `
+          const swiperDiv = document.createElement('div');
+          swiperDiv.id = 'graphics-swiper';
+          swiperDiv.className = 'swiper graphics-swiper';
+          swiperDiv.innerHTML = `
             <div class="swiper-wrapper">
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Date Reveal.png" class="img-fluid" alt="Graphic 1"></div>
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Ticket.png" class="img-fluid" alt="Graphic 2"></div>
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Coming Soon Post Final 1.0.png" class="img-fluid" alt="Graphic 3"></div>
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/final 1.00.jpg" class="img-fluid" alt="Graphic 4"></div>
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Final Post MTT.png" class="img-fluid" alt="Graphic 5"></div>
-              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Instagram post - 1.jpg" class="img-fluid" alt="Graphic 6"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Date Reveal.png" alt="Graphic 1"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Ticket.png" alt="Graphic 2"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Coming Soon Post Final 1.0.png" alt="Graphic 3"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/final 1.00.jpg" alt="Graphic 4"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Final Post MTT.png" alt="Graphic 5"></div>
+              <div class="swiper-slide"><img src="assets/img/portfolio/graphics/Instagram post - 1.jpg" alt="Graphic 6"></div>
             </div>
             <div class="swiper-pagination"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
           `;
-          document.getElementById('excel-container').appendChild(graphicsContainer);
-          // Initialize Swiper
+          excelContainer.appendChild(swiperDiv);
+          
           setTimeout(() => {
-            new Swiper('.graphics-swiper', {
-              loop: true,
-              speed: 700,
-              slidesPerView: 1,
-              spaceBetween: 30,
-              centeredSlides: true,
-              grabCursor: true,
-              effect: 'slide',
-              pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-              },
-              navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              },
-              autoplay: {
-                delay: 3500,
-                disableOnInteraction: false,
-              },
-            });
+            if (typeof Swiper !== 'undefined') {
+              new Swiper('#graphics-swiper', {
+                loop: true,
+                speed: 700,
+                slidesPerView: 1,
+                spaceBetween: 30,
+                centeredSlides: true,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: {
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                },
+                autoplay: { delay: 3500, disableOnInteraction: false }
+              });
+            }
           }, 100);
         }
-      } else if (pdfPath) {
-        excelViewer.style.display = '';
-        downloadLink.style.display = '';
-        excelViewer.src = pdfPath;
-        downloadLink.href = pdfPath;
-        const graphicsSwiper = document.getElementById('graphics-swiper');
-        if (graphicsSwiper) graphicsSwiper.remove();
-      } else {
-        excelViewer.style.display = '';
-        downloadLink.style.display = '';
-        excelViewer.src = excelPath;
-        let downloadId = '';
-        switch(projectId) {
-          case 'upl':
-            downloadId = '1dgtyfq_D9ASNYvuNDbTrFo928F6fXqye';
-            break;
-          case 'indigo':
-            downloadId = '1yK5ai93rM45dI11enqn_cLS3YHFaF_V4';
-            break;
-          case 'pidilite':
-            downloadId = '19t6Vleub-I_dcjVMf7r0eg-uDWhE25Zf';
-            break;
-          case 'srf':
-            downloadId = '1LzzfMQctr0UgkpdLVgF-c7eWnGdmdytJ';
-            break;
-        }
-        if (downloadId) {
-          downloadLink.href = `https://docs.google.com/spreadsheets/d/${downloadId}/export?format=xlsx`;
+      } else if (project.pdfPath) {
+        // PDF file
+        excelViewer.style.display = 'block';
+        excelViewer.src = project.pdfPath;
+        downloadLink.style.display = 'block';
+        downloadLink.href = project.pdfPath;
+        downloadLink.download = project.pdfPath.split('/').pop();
+      } else if (project.excelPath) {
+        // Excel/Google Sheets
+        excelViewer.style.display = 'block';
+        excelViewer.src = project.excelPath;
+        downloadLink.style.display = 'block';
+        if (project.downloadId) {
+          downloadLink.href = `https://docs.google.com/spreadsheets/d/${project.downloadId}/export?format=xlsx`;
         } else {
           downloadLink.href = '#';
         }
-        const graphicsSwiper = document.getElementById('graphics-swiper');
-        if (graphicsSwiper) graphicsSwiper.remove();
-      }
-
-      // Set main-title, project-info-title, project-desc-title, and project-description
-      const projectTitles = {
-        upl: {
-          main: 'UPL Ltd. Financial Valuation',
-          info: 'Project information',
-          descTitle: 'About This Project',
-          desc: 'I built a <strong>3-statement financial model</strong> & <strong>Debt-to-Equity </strong>schedules for UPL Ltd.,<strong>forecasted revenue</strong> based on assumptions, projected <strong>free cash flows</strong>, and ran a <strong>levered DCF</strong> using an 11.3% WACC to estimate intrinsic value. The analysis included <strong>terminal value</strong> calculations (perpetuity growth and EBITDA multiples) and <strong>sensitivity analysis</strong> on growth/discount rates. I also benchmarked UPL against peers using <strong>EV/EBITDA</strong> and <strong>P/E multiples</strong> , modeled scenarios (base/optimistic/ conservative), and concluded the stock was <strong>undervalued</strong> relative to its <strong>DCF-derived</strong> share price.'
-        },
-        indigo: {
-          main: 'IndiGo (3-Statement Operating Model)',
-          info: 'Project information',
-          descTitle: 'About This Project',
-          desc: 'I built & forecasted a <strong>3-statement operating model</strong> for IndiGo (InterGlobe Aviation Limited); projected <strong>free cash flows</strong> using detailed <strong>revenue drivers</strong> (ASK growth, passenger yield, ancillary revenue) and <strong>cost assumptions</strong> (fuel prices, CASK-ex fuel). Also, performed <strong>ratio analysis</strong>, and <strong>scenario modeling</strong> to assess financial health and growth potential.'
-        },
-        pidilite: {
-          main: 'Pidilite Industries Ltd. Valuation',
-          info: 'Project information',
-          descTitle: 'About This Project',
-          desc: 'In this project, I analyzed the financial performance of <strong>Pidilite Industries Ltd</strong> using key tools such as <strong>common size analysis, trend analysis, and DuPont analysis</strong>. I worked with its balance sheet, income statement, and cash flow statement to understand how the company manages its money. I evaluated key financial ratios such as <strong>ROE, ROCE, debt-equity ratio, and net profit margin</strong>. This helped me assess Pidilite’s profitability, liquidity, and overall financial health in a more practical, hands-on way.'
-        },
-        srf: {
-          main: 'SRF Corporation Valuation (basic)',
-          info: 'Project information',
-          descTitle: 'About This Project',
-          desc: 'I developed a <strong>3-statement financial model</strong> for SRF Ltd., capturing historical performance (2015–2024) and forecasting key metrics like sales, EBITDA, and EPS. The analysis included detailed <strong>ratio analysis</strong> (margins, ROE, ROCE, turnover ratios) and tracked trends in <strong>working capital, profitability, and leverage</strong>. I also calculated regression beta for <strong>market risk assessment</strong> and benchmarked SRF’s operational and financial efficiency over time, providing a comprehensive view of its financial health and growth trajectory.'
-        },
-        innovate: {
-          main: 'Innovate 4.0 - 2024',
-          info: 'Basic Information',
-          descTitle: 'About This Project',
-          desc: 'In progress...'
-        },
-        prosper: {
-          main: 'Prosper: Case Competition',
-          info: 'Basic Information',
-          descTitle: 'About This Project',
-          desc: 'This case competition analyzes India’s teleconsultation and e-pharmacy markets, projected to reach $5.5 billion with a 31% CAGR. Technical solutions include virtual waiting rooms, reminder systems, cancellation policies, and end-to-end encryption. Key concerns are doctor-patient engagement, data privacy, and high no-show rates. Proposed interventions—analytics-driven overbooking, partnerships with Max Healthcare and Dr Lal Path Labs, and UI/UX improvements—are assessed for investment, impact, and complexity, emphasizing integrated, patient-centric digital health platforms'
-        },
-        aagaaz: {
-          main: 'Aagaaz - IIMA',
-          info: 'Case Competition Project',
-          descTitle: 'About This Project',
-          desc: 'Prarambh (Kaagazi) targets efficient paper waste management in Delhi, collecting from institutions and corporates, partnering with Green-O-Tech and the Kathputli community. The process includes waste segregation, recycling, and upcycling into eco-friendly products like notebooks and bookmarks. Kaagazi Clubs promote awareness and responsible disposal. Financials detail revenue streams and gross margins, while SWOT and competitor analysis highlight sustainability strengths. The roadmap includes e-commerce, product diversification, and expansion, supporting Sustainable Development Goals and a circular economy.'
-        },
-        bric: {
-          main: 'BRIC Nations Research Paper',
-          info: 'Research Report Project',
-          descTitle: 'About This Project',
-          desc: 'Research Paper: Comparative analysis of BRIC nations and the Indian Financial System.'
-        },
-        edtech: {
-          main: 'Ed-Tech Industry Report (2025)',
-          info: 'Research Report Project',
-          descTitle: 'About This Project',
-          desc: 'India’s Ed-tech industry, valued at $7.5 billion in 2024, spans K-12 education, test preparation, Ed-tech SaaS, online certification, skill development, and online discovery. Major players like Byju’s, Physics Wallah, and Vedantu leverage AI, gamified learning, and adaptive platforms. The sector saw a funding surge during the pandemic, then an 87% decline, but is recovering. Key challenges include high pricing, retention, and doubt resolution; opportunities lie in upskilling, regional content, and B2C models.' 
-        },
-        pptbric: {
-          main: 'BRIC Financial System Presentation',
-          info: 'Presentation Report Project',
-          descTitle: 'About This Project',
-          desc: 'PPT Presentation Report: Financial System & Analysis of BRIC nations.'
-        },
-        zomato: {
-          main: 'Zomato Sales Analysis',
-          info: 'Data Analysis Project',
-          descTitle: 'About This Project',
-          desc: 'The Zomato report analyzes order and sales data using metrics like order quantity, order amount, cuisine type, and customer demographics (gender, age group, occupation, marital status). Vegetarian orders dominate, with Chinese and North Indian cuisines rated highest. Top restaurants by sales and detailed transactional data by year, month, and city are presented. Data visualization reveals trends in consumer behavior, average order values, and market segmentation, supporting targeted marketing and operational decisions for Zomato and partners.'
-        },
-        powerbi: {
-          main: 'Power BI Profitability Project',
-          info: 'Data Analysis Project',
-          descTitle: 'About This Project',
-          desc: 'The Power BI dashboard-driven report visualizes profitability across departments (Sales, R&D, HR, IT, Marketing, Operations) and regions (North, South, East, West, Central). Key metrics include total profit margin (80.04%), total revenue, cost per employee, and revenue per employee. North region and Sales department lead in profitability and efficiency. The analysis covers monthly trends, departmental and regional breakdowns, highlighting operational strengths and supporting strategic decisions with advanced data visualization and DAX calculations.'
-        },
-        enactus: {
-          main: 'Enactus India National Competition',
-          info: 'Other Project',
-          descTitle: 'About This Project',
-          desc: 'Enactus India’s 2024 report features Project Kaagazi, which collects, segregates, and recycles paper waste through Kaagazi Clubs, empowering the Kathputli community in product design and sales. Project Kshitij partners with NGOs to improve infrastructure, address malnutrition, and implement the VAKT Model for primary education. Both projects prioritize sustainable impact, economic empowerment, and responsible consumption, showing measurable results in revenue, water saved, and thousands directly impacted through innovative, eco-friendly business processes.'
-        },
-        graphics: {
-          main: 'My Graphic Designs',
-          info: 'Graphic Design Project',
-          descTitle: 'About This Project',
-          desc: 'A showcase of my graphic design work, including creativity and skills.'
-        },
-        // Add more or update as needed
-      };
-      if (projectTitles[projectId]) {
-        document.getElementById('main-title').textContent = projectTitles[projectId].main;
-        document.getElementById('project-info-title').textContent = projectTitles[projectId].info;
-        document.getElementById('project-desc-title').textContent = projectTitles[projectId].descTitle;
-        document.getElementById('project-description').innerHTML = projectTitles[projectId].desc;
-      } else {
-        document.getElementById('main-title').textContent = 'Project Details';
-        document.getElementById('project-info-title').textContent = 'Project Information';
-        document.getElementById('project-desc-title').textContent = 'About This Project';
-        document.getElementById('project-description').innerHTML = '';
       }
     }
-    window.onload = loadProjectDetails;
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadProject);
+    } else {
+      loadProject();
+    }
   </script>
 </body>
 </html>

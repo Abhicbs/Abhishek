@@ -119,10 +119,41 @@
       element: item,
       offset: '80%',
       handler: function(direction) {
-        let progress = item.querySelectorAll('.progress .progress-bar');
-        progress.forEach(el => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%';
+        const duration = 3000; // Keep in sync with CSS (3s)
+
+        item.querySelectorAll('.progress').forEach(progressEl => {
+          const bar = progressEl.querySelector('.progress-bar');
+          const valEl = progressEl.querySelector('.skill .val');
+          if (!bar) return;
+
+          const target = parseInt(bar.getAttribute('aria-valuenow')) || 0;
+
+          // Trigger tube fill (CSS handles smooth animation)
+          bar.style.width = target + '%';
+
+          // Animate percentage text from 0 to target
+          if (valEl) {
+            const startValue = 0;
+            const endValue = target;
+            let startTime = null;
+
+            function step(timestamp) {
+              if (!startTime) startTime = timestamp;
+              const elapsed = timestamp - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const current = Math.round(startValue + (endValue - startValue) * progress);
+              valEl.textContent = current + '%';
+              if (progress < 1) {
+                window.requestAnimationFrame(step);
+              }
+            }
+
+            // Start from 0% visually
+            valEl.textContent = '0%';
+            window.requestAnimationFrame(step);
+          }
         });
+        this.destroy();
       }
     });
   });
@@ -187,6 +218,57 @@
   window.addEventListener("load", initSwiper);
 
   /**
+   * Init Courses Swiper
+   */
+  function initCoursesSwiper() {
+    const coursesSwiper = document.querySelector('.courses-swiper');
+    if (coursesSwiper && typeof Swiper !== 'undefined') {
+      const swiperInstance = new Swiper('.courses-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        // Continuous one-way medium-speed scrolling
+        speed: 3500,
+        autoplay: {
+          delay: 0,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: false,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        },
+      });
+
+      // Pause autoplay on hover, resume on mouse leave
+      coursesSwiper.addEventListener('mouseenter', () => {
+        swiperInstance.autoplay.stop();
+      });
+
+      coursesSwiper.addEventListener('mouseleave', () => {
+        swiperInstance.autoplay.start();
+      });
+    }
+  }
+
+  window.addEventListener("load", initCoursesSwiper);
+
+  /**
    * Correct scrolling position upon page load for URLs containing hash links.
    */
   window.addEventListener('load', function(e) {
@@ -225,5 +307,24 @@
   }
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
+
+  /**
+   * Resume Item Toggle Functionality
+   */
+  window.toggleResumeItem = function(header) {
+    const resumeItem = header.closest('.resume-item');
+    const content = resumeItem.querySelector('.resume-item-content');
+    const icon = header.querySelector('.resume-toggle-icon');
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+      content.style.display = 'block';
+      header.classList.add('active');
+      if (icon) icon.textContent = '▲';
+    } else {
+      content.style.display = 'none';
+      header.classList.remove('active');
+      if (icon) icon.textContent = '▼';
+    }
+  };
 
 })();
