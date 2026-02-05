@@ -119,7 +119,7 @@
       element: item,
       offset: '80%',
       handler: function(direction) {
-        const duration = 3000; // Keep in sync with CSS (3s)
+        const duration = 2000; // Keep in sync with CSS (2s)
 
         item.querySelectorAll('.progress').forEach(progressEl => {
           const bar = progressEl.querySelector('.progress-bar');

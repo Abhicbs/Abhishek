@@ -23,7 +23,7 @@
   font-size: 14px;
   font-weight: 500;
   color: #fff;
-  background-color: #007bff;
+  background-color: #10244C;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -39,7 +39,7 @@
 }
 
 .btn-view-project:hover {
-  background-color: #0056b3;
+  background-color: #10244C;
 }
 .btn-download, .btn-contact {
   display: flex;
@@ -101,7 +101,7 @@
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #272829; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #050d18; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #149ddd; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --accent-color: #10244C; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
   --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
@@ -1038,7 +1038,7 @@ section,
   width: 0;
   height: 14px;
   /* Smooth, monotonic fill (no overshoot) */
-  transition: width 3s linear;
+  transition: width 2s linear;
   background: linear-gradient(90deg, #10244C 0%, #17356B 40%, #10244C 100%);
   border-radius: 999px;
   position: relative;

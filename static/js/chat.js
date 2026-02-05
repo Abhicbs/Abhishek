@@ -117,8 +117,8 @@ async function sendMessage() {
 
         try {
             console.log("Making API call to /ask");
-            // Send message to backend
-            const response = await fetch('http://localhost:5000/ask', {
+            // Send message to backend (same origin as portfolio site)
+            const response = await fetch('/ask', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
